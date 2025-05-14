@@ -5,13 +5,12 @@
     <link rel="stylesheet" 
           href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script 
-        src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h2>Employee List</h2>
-        <table id="employeeTable" class="display">
+        <h2>Employee List (Paginated)</h2>
+        <table id="employeeTable" class="display" style="width:100%">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -20,20 +19,25 @@
                     <th>Salary</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr th:each="emp : ${employees}">
-                    <td th:text="${emp['id']}">1</td>
-                    <td th:text="${emp['name']}">John</td>
-                    <td th:text="${emp['department']}">IT</td>
-                    <td th:text="${emp['salary']}">50000</td>
-                </tr>
-            </tbody>
         </table>
     </div>
 
     <script>
         $(document).ready(function () {
-            $('#employeeTable').DataTable();
+            $('#employeeTable').DataTable({
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    url: '/api/employees',
+                    type: 'POST'
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'name' },
+                    { data: 'department' },
+                    { data: 'salary' }
+                ]
+            });
         });
     </script>
 </body>
